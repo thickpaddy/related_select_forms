@@ -149,7 +149,18 @@ class ActionView::Helpers::InstanceTag #:nodoc:
     def javascript_code_for_preselection(selected_value, element_id = tag_id)
       return "$('#{element_id}').refresh();" if selected_value.blank?
 
-      code = ["$('#{element_id}').select('#{selected_value}');"]
+      if selected_value.kind_of?(Array)
+        code = [%Q{
+          $('#{element_id}').childElements().each(function(opt) {
+            if ( ['#{selected_value.join("','")}'].indexOf(opt.value) != -1 ) {
+              opt.selected = true;
+            }
+          });
+        }]
+        selected_value = selected_value.first
+      else
+        code = ["$('#{element_id}').select('#{selected_value}');"]
+      end
       while relations = related_select_cache[element_id]
         element_id = relations[:parent]
         selected_value = relations[:relations][selected_value.to_s]

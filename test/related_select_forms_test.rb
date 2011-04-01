@@ -4,7 +4,7 @@ require 'rubygems'
 require 'action_controller'
 require 'action_view'
 
-require File.dirname(__FILE__) + '/../init'
+require File.dirname(__FILE__) + '/../lib/related_select_form_helper'
 
 Select = Struct.new(:value) 
 O = Struct.new(:id, :name, :parent_id) 
